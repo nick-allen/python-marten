@@ -1,7 +1,8 @@
 import os
 import sys
 from unittest import TestCase
-from nose.tools import assert_dict_equal
+import mock
+from nose.tools import assert_dict_equal, assert_raises
 
 from marten.conf import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory
 
@@ -42,9 +43,9 @@ class BaseConfigurationTestCase(TestCase):
 		"""Return configuration instance to be used in all generic tests"""
 		raise NotImplementedError()
 
+
 	def test_lazyload_config(self):
 		"""Test that the config is lot loaded and parsed until the first request for a configuration"""
-
 		self.assertIsNone(self.configuration._Configuration__config)
 		self.assertDictEqual(self.configuration.config, {'SHOULD_EXIST': 1})
 		self.assertDictEqual(self.configuration._Configuration__config, {'SHOULD_EXIST': 1})
@@ -74,6 +75,25 @@ class ConfigurationTestCase(BaseConfigurationTestCase):
 	def test_filter_config(self):
 		"""Test that Configuration._get_config_keys() only returns uppercase attributes not starting with underscore"""
 		self.assertDictEqual(Configuration._filter_config(self.sample_source_dict), {'SHOULD_EXIST': 1})
+
+	def tet_replace_env(self):
+		"""Test that Configuration._replace_env() correctly replaces $VAR entries"""
+		input_dict = {
+			'REPLACE': '$VAR',
+			'EMPTY': '$EMPTY',
+			'ESCAPE': '$$VAR',
+			'KEEP': 'VAR',
+			'IGNORE': '_$VAR'
+		}
+		output_dict = {
+			'REPLACE': 'value',
+			'EMPTY': '',
+			'ESCAPE': '$VAR',
+			'KEEP': 'VAR',
+			'IGNORE': '_$VAR'
+		}
+		with mock.patch('os.environ', {'VAR': 'value'}):
+			self.assertDictEqual(Configuration._replace_env(input_dict), output_dict)
 
 
 class ModuleImportedConfigurationTestCase(BaseConfigurationTestCase):
@@ -113,3 +133,6 @@ def test_parse_directory():
 		"PYTHON": True,
 		"DUPLICATE": 'python'
 	})
+
+	with assert_raises(ValueError):
+		parse_directory('/Not/a/real/path', 'test')

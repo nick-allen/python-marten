@@ -1,3 +1,4 @@
+import copy
 import json
 import imp
 import os
@@ -14,6 +15,7 @@ class Configuration(object):
 		"""Expects config_source to be a dict"""
 		self._source = config_source
 		self.__config = None
+		self.__raw_config = None
 
 	def __getitem__(self, item):
 		"""Lazy-load config using parse_source(), and act like the underlying dict"""
@@ -23,8 +25,34 @@ class Configuration(object):
 	def config(self):
 		"""Lazy-load config"""
 		if self.__config is None:
-			self.__config = self._filter_config(self.parse_source())
+			self.__config = self._replace_env(self.raw_config)
+
 		return self.__config
+
+	@property
+	def raw_config(self):
+		if self.__raw_config is None:
+			self.__raw_config = self._filter_config(self.parse_source())
+		return self.__raw_config
+
+	@staticmethod
+	def _replace_env(config_dict):
+		"""
+		Replace all $VAR environment variables in dict values
+
+		Treat $$VAR as escaped to actual $VAR
+		"""
+		d = copy.copy(config_dict)
+
+		for key, val in config_dict.iteritems():
+			if isinstance(val, basestring) and val.isupper() and val.startswith('$'):
+				new_val = val[1:]
+				if new_val.startswith('$'):
+					d[key] = new_val
+				else:
+					d[key] = os.environ.get(new_val, '')
+
+		return d
 
 	@staticmethod
 	def _filter_config(config_dict):
