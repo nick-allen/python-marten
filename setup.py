@@ -13,7 +13,8 @@ with open('README.md') as f:
 	long_description = f.read().strip()
 
 test_requirements = [
-	'nose>=1.0'
+	'nose>=1.0',
+	'mock>=1.0'
 ]
 
 setup(
@@ -31,6 +32,11 @@ setup(
 	install_requires=parse_requirements('requirements.txt'),
 	extras_require={
 		'test': test_requirements
+	},
+	entry_points={
+		'console_scripts': [
+			'marten = marten.cli:marten_cli'
+		]
 	},
 	test_suite='nose.collector',
 	tests_require=test_requirements
