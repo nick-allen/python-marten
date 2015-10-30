@@ -1,9 +1,9 @@
 import os
 import sys
 from unittest import TestCase
+from nose.tools import assert_dict_equal
 
-from marten.configurations import Configuration, ModuleConfiguration, JSONConfiguration
-
+from marten.conf import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
@@ -61,8 +61,6 @@ class BaseConfigurationTestCase(TestCase):
 		self.assertDictEqual(self.configuration.config, {'SHOULD_EXIST': 1})
 
 
-
-
 class ConfigurationTestCase(BaseConfigurationTestCase):
 	"""Tests for the base Configuration class"""
 
@@ -85,11 +83,11 @@ class ModuleImportedConfigurationTestCase(BaseConfigurationTestCase):
 		return ModuleConfiguration(__import__('module_config'))
 
 
-class ModuleStringConfigurationTestCase(BaseConfigurationTestCase):
+class ModuleFSPathStringConfigurationTestCase(BaseConfigurationTestCase):
 	"""Tests for the ModuleConfiguration class"""
 
 	def get_configuration(self):
-		return ModuleConfiguration('module_config')
+		return ModuleConfiguration(os.path.join(os.path.dirname(__file__), 'fixtures/module_config.py'))
 
 
 class ModulePackageStringConfigurationTestCase(BaseConfigurationTestCase):
@@ -103,3 +101,15 @@ class JSONConfigurationTestCase(BaseConfigurationTestCase):
 
 	def get_configuration(self):
 		return JSONConfiguration(os.path.join(os.path.dirname(__file__), 'fixtures/static/config.json'))
+
+
+
+def test_parse_directory():
+	"""Test that the parse_directory function properly merges multiple configuration files"""
+	config = parse_directory(os.path.join(os.path.dirname(__file__), 'fixtures/parse_directory'), 'test')
+
+	assert_dict_equal(config.config, {
+		"JSON": True,
+		"PYTHON": True,
+		"DUPLICATE": 'python'
+	})

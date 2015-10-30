@@ -1,0 +1,2 @@
+PYTHON = True
+DUPLICATE = "python"
