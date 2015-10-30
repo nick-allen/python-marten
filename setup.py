@@ -12,10 +12,7 @@ def parse_requirements(requirements):
 with open('README.md') as f:
 	long_description = f.read().strip()
 
-test_requirements = [
-	'nose>=1.0',
-	'mock>=1.0'
-]
+test_requirements = parse_requirements('test-requirements.txt')
 
 setup(
 	name='marten',
