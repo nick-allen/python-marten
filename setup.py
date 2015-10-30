@@ -22,7 +22,7 @@ setup(
 	license='MIT',
 	author='Nick Allen',
 	author_email='nick.allen.cse@gmail.com',
-	description='',
+	description='Simple Python configuration management',
 	long_description=long_description,
 	include_package_data=True,
 	zip_safe=False,
