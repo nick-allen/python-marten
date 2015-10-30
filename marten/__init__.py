@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os as _os
 from .conf import parse_directory as _parse_directory
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
 
