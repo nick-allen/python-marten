@@ -11,8 +11,9 @@ __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
 def marten_cli():
 	"""Outputs parsed config at martin.config as JSON"""
-	print(json.dumps(
-		marten.config.config,
-		sort_keys=True,
-		indent=4
-	))
+	if marten.config is not None:
+		print(json.dumps(
+			marten.config.config,
+			sort_keys=True,
+			indent=4
+		))
