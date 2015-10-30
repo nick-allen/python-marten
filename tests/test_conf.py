@@ -76,7 +76,7 @@ class ConfigurationTestCase(BaseConfigurationTestCase):
 		"""Test that Configuration._get_config_keys() only returns uppercase attributes not starting with underscore"""
 		self.assertDictEqual(Configuration._filter_config(self.sample_source_dict), {'SHOULD_EXIST': 1})
 
-	def tet_replace_env(self):
+	def test_replace_env(self):
 		"""Test that Configuration._replace_env() correctly replaces $VAR entries"""
 		input_dict = {
 			'REPLACE': '$VAR',
