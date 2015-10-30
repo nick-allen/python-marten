@@ -6,7 +6,7 @@ python:
 install:
   - pip install -e .
 
-script: nosetests --with-coverage --cover=marten
+script: nosetests --with-coverage --cover-package=marten
 
 after_success:
   - coveralls
