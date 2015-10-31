@@ -8,7 +8,7 @@ Simple Python configuration management
 Inspired by [node config](https://www.npmjs.com/package/config), if you've used it before, Marten will feel familiar
 with a couple of extras
 
-Works on Python 2 and 3
+Tested with Python 2.7 and 3.5
 
 ---
 
