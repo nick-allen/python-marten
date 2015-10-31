@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import os as _os
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 
 
