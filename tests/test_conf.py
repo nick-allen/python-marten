@@ -1,7 +1,13 @@
 import os
 import sys
 from unittest import TestCase
-import mock
+from six import with_metaclass
+
+try:
+	from unittest import mock
+except ImportError:
+	import mock
+
 from nose.tools import assert_dict_equal, assert_raises
 
 from marten.conf import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory
@@ -21,11 +27,10 @@ class ReusableTestCaseMetaclass(type):
 		return super(ReusableTestCaseMetaclass, mcs).__new__(mcs, name, parents, dict_)
 
 
-class BaseConfigurationTestCase(TestCase):
+class BaseConfigurationTestCase(with_metaclass(ReusableTestCaseMetaclass, TestCase)):
 	"""Base TestCase class for Configuration classes"""
 
 	__test__ = False
-	__metaclass__ = ReusableTestCaseMetaclass
 
 	# Fixture files should evaluate to the same dict
 	sample_source_dict = {

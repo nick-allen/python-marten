@@ -8,6 +8,7 @@ Simple Python configuration management
 Inspired by [node config](https://www.npmjs.com/package/config), if you've used it before, Marten will feel familiar
 with a couple of extras
 
+Tested with Python 2.7 and 3.5
 
 ---
 
@@ -18,8 +19,6 @@ with a couple of extras
 
 
 # Usage
-
-## Quick Start
 
 Marten provides several ways to load configurations, the simplest being the bundled config automatically
 created by Marten using files found in the `.marten/` directory
@@ -43,6 +42,8 @@ The bundled config is available in python at `marten.config`, and can be accesse
 >>> config['EXAMPLE']
 True
 ```
+
+# Features
 
 ## Swappable Configurations
 

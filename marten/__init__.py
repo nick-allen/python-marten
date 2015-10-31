@@ -1,9 +1,8 @@
 from __future__ import absolute_import
 
 import os as _os
-from .conf import parse_directory as _parse_directory
 
-__version__ = '0.1.1'
+__version__ = '0.2.0'
 
 
 
@@ -13,4 +12,8 @@ config = None
 _marten_dir = _os.path.join(_os.getcwd(), '.marten')
 
 if _os.path.isdir(_marten_dir):
-	config = _parse_directory(_marten_dir, _os.environ.get('MARTEN_ENV', 'default'))
+	try:
+		from .conf import parse_directory as _parse_directory
+		config = _parse_directory(_marten_dir, _os.environ.get('MARTEN_ENV', 'default'))
+	except Exception:
+		pass

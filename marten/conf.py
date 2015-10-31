@@ -3,6 +3,8 @@ import json
 import imp
 import os
 
+import six
+
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
 
@@ -44,8 +46,8 @@ class Configuration(object):
 		"""
 		d = copy.copy(config_dict)
 
-		for key, val in config_dict.iteritems():
-			if isinstance(val, basestring) and val.isupper() and val.startswith('$'):
+		for key, val in config_dict.items():
+			if isinstance(val, six.string_types) and val.isupper() and val.startswith('$'):
 				new_val = val[1:]
 				if new_val.startswith('$'):
 					d[key] = new_val
@@ -57,7 +59,7 @@ class Configuration(object):
 	@staticmethod
 	def _filter_config(config_dict):
 		"""Returns keys in iterable that are uppercase and do not start with underscore"""
-		return {key: val for key, val in config_dict.iteritems() if key.isupper() and not key.startswith('_')}
+		return {key: val for key, val in config_dict.items() if key.isupper() and not key.startswith('_')}
 
 	def parse_source(self):
 		"""Default no-op returning self._source"""
@@ -71,9 +73,9 @@ class ModuleConfiguration(Configuration):
 
 	def parse_source(self):
 		"""Load module if provided a dot-string, then parse config from module"""
-		if isinstance(self._source, basestring):
+		if isinstance(self._source, six.string_types):
 			if os.path.isfile(self._source):
-				module = imp.load_source(os.urandom(20).encode('hex'), self._source)
+				module = imp.load_source(self._source, self._source)
 			else:
 				module = __import__(self._source, fromlist=['*'])
 		else:

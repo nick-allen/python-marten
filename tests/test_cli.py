@@ -1,19 +1,27 @@
 from __future__ import print_function
 
-from mock import patch
+try:
+	from unittest.mock import patch
+except ImportError:
+	from mock import patch
+
+import six
 
 from marten.cli import marten_cli
 from marten.conf import Configuration
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
-
+if six.PY2:
+	print_patch = patch('__builtin__.print')
+else:
+	print_patch = patch('builtins.print')
 
 def test_marten_cli():
 	"""Test the output of marten cli command"""
 	d = {'TEST': 1}
 
-	with patch('__builtin__.print') as mock:
+	with print_patch as mock:
 		with patch('marten.config', Configuration(d)):
 			marten_cli()
 
