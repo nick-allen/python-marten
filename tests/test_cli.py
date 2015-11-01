@@ -8,7 +8,7 @@ except ImportError:
 import six
 
 from marten.cli import marten_cli
-from marten.conf import Configuration
+from marten.configurations import Configuration
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 

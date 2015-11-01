@@ -10,12 +10,14 @@ except ImportError:
 
 from nose.tools import assert_dict_equal, assert_raises
 
-from marten.conf import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory, YAMLConfiguration
+from marten.configurations import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory, YAMLConfiguration
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
 
 TEST_DIR = os.path.dirname(__file__)
+
+os.environ['MARTEN_TEST_VAR'] = 'test_value'
 
 # Add test fixtures to path
 sys.path.append(os.path.join(TEST_DIR, 'fixtures'))
@@ -40,7 +42,9 @@ class BaseConfigurationTestCase(with_metaclass(ReusableTestCaseMetaclass, TestCa
 		'_SHOULD_NOT_EXIST': 2,
 		'SHOULD_NOT_Exist': 3,
 		'shouldNotExist': 4,
-		'should_not_exist': 5
+		'NESTED': {
+			'MARTEN_TEST_VAR': 'Value: ${MARTEN_TEST_VAR}'
+		}
 	}
 
 	def setUp(self):
@@ -54,8 +58,13 @@ class BaseConfigurationTestCase(with_metaclass(ReusableTestCaseMetaclass, TestCa
 	def test_lazyload_config(self):
 		"""Test that the config is lot loaded and parsed until the first request for a configuration"""
 		self.assertIsNone(self.configuration._Configuration__config)
-		self.assertDictEqual(self.configuration.config, {'SHOULD_EXIST': 1})
-		self.assertDictEqual(self.configuration._Configuration__config, {'SHOULD_EXIST': 1})
+		self.assertEqual(self.configuration.config, {
+			'SHOULD_EXIST': 1,
+			'NESTED': {
+				'MARTEN_TEST_VAR': 'Value: test_value'
+			}
+		})
+		self.assertEqual(self.configuration._Configuration__config, self.configuration.config)
 
 	def test_getitem(self):
 		"""Test that configurations can be accessed like dicts"""
@@ -63,10 +72,6 @@ class BaseConfigurationTestCase(with_metaclass(ReusableTestCaseMetaclass, TestCa
 
 		with self.assertRaises(KeyError):
 			self.configuration['_SHOULD_NOT_EXIST']
-
-	def test_final_config(self):
-		"""Test that the configuration matches the parsed sample"""
-		self.assertDictEqual(self.configuration.config, {'SHOULD_EXIST': 1})
 
 
 class ConfigurationTestCase(BaseConfigurationTestCase):
@@ -77,30 +82,31 @@ class ConfigurationTestCase(BaseConfigurationTestCase):
 
 	def test_parse_source_as_dict(self):
 		"""Test that Configuration.parse_source() returns the initial source"""
-		self.assertDictEqual(self.configuration.parse_source(), self.sample_source_dict)
+		self.assertEqual(self.configuration.parse_source(), self.sample_source_dict)
 
 	def test_filter_config(self):
-		"""Test that Configuration._get_config_keys() only returns uppercase attributes not starting with underscore"""
-		self.assertDictEqual(Configuration._filter_config(self.sample_source_dict), {'SHOULD_EXIST': 1})
+		"""Test that Configuration._filter_config() only returns uppercase attributes not starting with underscore"""
+		self.assertEqual(
+			sorted(Configuration._filter_config(self.sample_source_dict).keys()),
+			sorted(['SHOULD_EXIST', 'NESTED'])
+		)
 
 	def test_replace_env(self):
 		"""Test that Configuration._replace_env() correctly replaces $VAR entries"""
 		input_dict = {
 			'REPLACE': '$VAR',
 			'EMPTY': '$EMPTY',
-			'ESCAPE': '$$VAR',
 			'KEEP': 'VAR',
-			'IGNORE': '_$VAR'
+			'INTERLACED': '_ $VAR with other content'
 		}
 		output_dict = {
 			'REPLACE': 'value',
-			'EMPTY': '',
-			'ESCAPE': '$VAR',
+			'EMPTY': '$EMPTY',
 			'KEEP': 'VAR',
-			'IGNORE': '_$VAR'
+			'INTERLACED': '_ value with other content'
 		}
 		with mock.patch('os.environ', {'VAR': 'value'}):
-			self.assertDictEqual(Configuration._replace_env(input_dict), output_dict)
+			self.assertEqual(Configuration._replace_env(input_dict), output_dict)
 
 
 class ModuleImportedConfigurationTestCase(BaseConfigurationTestCase):

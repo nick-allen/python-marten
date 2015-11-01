@@ -108,18 +108,19 @@ Current supported formats:
 * YAML
 
 
-## Environment Variable Replacement
+## Environment Variable Expansion
 
-Environment variables in the format `$VAR` are automatically replaced when parsed
+Environment variables in values with the format `$VAR` or `${VAR}` are automatically expanded
 
-Using two `$$` escapes the variable, stripping the first `$`
+Unset environment variables are unmodified
 
 ```
-> echo '{"REPLACED": "$ENV", "ESCAPED": "$$ENV"}' > .marten/environ.json
+> echo '{"REPLACED1": "This ${ENV}", "REPLACED2": "Second $ENV", "IGNORED": "${MISSING}"}' > .marten/environ.json
 > MARTEN_ENV=environ ENV=value marten
 {
-    "REPLACED": "value",
-    "ESCAPED": "$ENV"
+    "IGNORED": "${MISSING}",
+    "REPLACED1": "This value",
+    "REPLACED2": "Second value"
 }
 ```
 
@@ -132,10 +133,12 @@ are merged together in the order they are loaded
 ```
 > echo 'PYTHON = True' > .marten/merge.py
 > echo '{"JSON": true}' > .marten/merge.json
+> echo 'YAML: true' > .marten/merge.yaml
 > MARTEN_ENV=merge marten
 {
+    "JSON": true,
     "PYTHON": true,
-    "JSON": true
+    "YAML": true
 }
 ```
 

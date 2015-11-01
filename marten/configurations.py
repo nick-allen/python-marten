@@ -1,7 +1,7 @@
-import copy
 import json
 import imp
 import os
+import collections
 
 import six
 import yaml
@@ -26,7 +26,7 @@ class Configuration(object):
 
 	@property
 	def config(self):
-		"""Lazy-load config"""
+		"""Return dict config parsed for environment variables"""
 		if self.__config is None:
 			self.__config = self._replace_env(self.raw_config)
 
@@ -34,27 +34,22 @@ class Configuration(object):
 
 	@property
 	def raw_config(self):
+		"""Returns raw dict config"""
 		if self.__raw_config is None:
 			self.__raw_config = self._filter_config(self.parse_source())
 		return self.__raw_config
 
 	@staticmethod
 	def _replace_env(config_dict):
-		"""
-		Replace all $VAR environment variables in dict values
-
-		Treat $$VAR as escaped to actual $VAR
-		"""
-		d = copy.copy(config_dict)
-
-		for key, val in config_dict.items():
-			if isinstance(val, six.string_types) and val.isupper() and val.startswith('$'):
-				new_val = val[1:]
-				if new_val.startswith('$'):
-					d[key] = new_val
-				else:
-					d[key] = os.environ.get(new_val, '')
-
+		"""Use os.path.expandvars to parse all values"""
+		d = {}
+		for key, value in config_dict.items():
+			if isinstance(value, collections.Mapping):
+				d[key] = Configuration._replace_env(value)
+			elif isinstance(value, six.string_types):
+				d[key] = os.path.expandvars(value)
+			else:
+				d[key] = value
 		return d
 
 	@staticmethod
@@ -132,7 +127,7 @@ def parse_directory(path, name):
 				ext = filename.split(name, 1)[1]
 				if ext in supported_extensions:
 					config = supported_extensions[ext](os.path.join(path, filename))
-					configs.update(config.config)
+					configs.update(config.raw_config)
 
 		return Configuration(configs)
 
