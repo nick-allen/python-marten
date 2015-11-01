@@ -10,13 +10,15 @@ except ImportError:
 
 from nose.tools import assert_dict_equal, assert_raises
 
-from marten.conf import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory
+from marten.conf import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory, YAMLConfiguration
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
 
+TEST_DIR = os.path.dirname(__file__)
+
 # Add test fixtures to path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'fixtures'))
+sys.path.append(os.path.join(TEST_DIR, 'fixtures'))
 
 
 class ReusableTestCaseMetaclass(type):
@@ -112,7 +114,7 @@ class ModuleFSPathStringConfigurationTestCase(BaseConfigurationTestCase):
 	"""Tests for the ModuleConfiguration class"""
 
 	def get_configuration(self):
-		return ModuleConfiguration(os.path.join(os.path.dirname(__file__), 'fixtures/module_config.py'))
+		return ModuleConfiguration(os.path.join(TEST_DIR, 'fixtures/module_config.py'))
 
 
 class ModulePackageStringConfigurationTestCase(BaseConfigurationTestCase):
@@ -125,13 +127,21 @@ class JSONConfigurationTestCase(BaseConfigurationTestCase):
 	"""Tests for the JSONConfiguration class"""
 
 	def get_configuration(self):
-		return JSONConfiguration(os.path.join(os.path.dirname(__file__), 'fixtures/static/config.json'))
+		return JSONConfiguration(os.path.join(TEST_DIR, 'fixtures/static/config.json'))
+
+
+class YAMLConfigurationTestCase(BaseConfigurationTestCase):
+	"""Tests for the YAMLConfiguration class"""
+
+	def get_configuration(self):
+		return YAMLConfiguration(os.path.join(TEST_DIR, 'fixtures/static/config.yaml'))
+
 
 
 
 def test_parse_directory():
 	"""Test that the parse_directory function properly merges multiple configuration files"""
-	config = parse_directory(os.path.join(os.path.dirname(__file__), 'fixtures/parse_directory'), 'test')
+	config = parse_directory(os.path.join(TEST_DIR, 'fixtures/parse_directory'), 'test')
 
 	assert_dict_equal(config.config, {
 		"JSON": True,

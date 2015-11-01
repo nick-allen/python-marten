@@ -4,6 +4,7 @@ import imp
 import os
 
 import six
+import yaml
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
@@ -11,7 +12,7 @@ __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 class Configuration(object):
 	"""Base Configuration class"""
 
-	file_extension = None
+	file_extensions = ()
 
 	def __init__(self, config_source):
 		"""Expects config_source to be a dict"""
@@ -69,7 +70,7 @@ class Configuration(object):
 class ModuleConfiguration(Configuration):
 	"""Configuration from an imported python module, dot-string, or full file path to a module"""
 
-	file_extension = '.py'
+	file_extensions = ('.py',)
 
 	def parse_source(self):
 		"""Load module if provided a dot-string, then parse config from module"""
@@ -87,20 +88,31 @@ class ModuleConfiguration(Configuration):
 class JSONConfiguration(Configuration):
 	"""Parse JSON file"""
 
-	file_extension = '.json'
+	file_extensions = ('.json',)
 
 	def parse_source(self):
-		"""Read file and run through parse function, returning all uppercase keys and their respective values"""
+		"""Read file and parse as JSON"""
 		with open(self._source) as f:
 			return json.load(f)
+
+
+class YAMLConfiguration(Configuration):
+	"""Parse YAML file"""
+
+	file_extensions = ('.yml', '.yaml')
+
+	def parse_source(self):
+		"""Read file and parse as YAML"""
+		with open(self._source) as f:
+			return yaml.load(f)
 
 
 
 supported_extensions = {}
 
 for cls in Configuration.__subclasses__():
-	if cls.file_extension:
-		supported_extensions[cls.file_extension] = cls
+	for ext in cls.file_extensions:
+		supported_extensions[ext] = cls
 
 
 def parse_directory(path, name):
