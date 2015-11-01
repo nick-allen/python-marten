@@ -15,7 +15,9 @@ Tested with Python 2.7 and 3.5
 
 # Install 
 
-`pip install marten`
+```
+> pip install marten
+```
 
 
 # Usage
@@ -34,7 +36,7 @@ created by Marten using files found in the `.marten/` directory
 
 The `marten` command outputs the fully parsed content of the bundled Marten config in JSON format
 
-The bundled config is available in python at `marten.config`, and can be accessed like a normal dictionary
+The bundled config is available in Python at `marten.config`, and can be accessed like a normal dictionary
 
 ```
 > python
@@ -43,7 +45,9 @@ The bundled config is available in python at `marten.config`, and can be accesse
 True
 ```
 
+
 # Features
+
 
 ## Swappable Configurations
 
@@ -68,12 +72,13 @@ The `MARTEN_ENV` variable defaults to `default`
 }
 ```
 
+
 ## Full Python
 
-The configuration files are not parsed, but are fully loaded as python modules
+The configuration files are not parsed, but are imported as Python modules
 
-Only capitalized variables not starting with underscores are read into the configuration, leaving everything else for
-logic and setup
+Only capitalized variables not starting with underscores are read into the configuration, allowing other variables
+to be used for logic and setup
 
 ```
 > echo "a = 1; _B = 2; FULL_PYTHON = a + _B == 3" > .marten/python.py
@@ -83,11 +88,10 @@ logic and setup
 }
 ```
 
+
 ## Multiple File Formats
 
-Marten is not tied to a single file format
-
-Currently, it supports Python and JSON, with additional support coming
+Marten is not limited to Python files
 
 ```
 > echo '{"KEY": "value"}' > .marten/formats.json
@@ -96,6 +100,13 @@ Currently, it supports Python and JSON, with additional support coming
     "KEY": "value"
 }
 ```
+
+Current supported formats:
+
+* Python
+* JSON
+* YAML
+
 
 ## Environment Variable Replacement
 
@@ -111,6 +122,7 @@ Using two `$$` escapes the variable, stripping the first `$`
     "ESCAPED": "$ENV"
 }
 ```
+
 
 ## Merge Multiple Files
 
