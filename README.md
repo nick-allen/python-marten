@@ -116,7 +116,7 @@ Using two `$$` escapes the variable, stripping the first `$`
 
 ```
 > echo '{"REPLACED": "$ENV", "ESCAPED": "$$ENV"}' > .marten/environ.json
-> MARTEN_ENV=environ.json ENV=value marten
+> MARTEN_ENV=environ ENV=value marten
 {
     "REPLACED": "value",
     "ESCAPED": "$ENV"
