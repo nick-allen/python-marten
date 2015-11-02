@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/nick-allen/marten.svg?branch=master)](https://travis-ci.org/nick-allen/marten)
 [![Coverage Status](https://coveralls.io/repos/nick-allen/marten/badge.svg?branch=master&service=github)](https://coveralls.io/github/nick-allen/marten?branch=master)
 
-Stupdi simple Python configuration management
+Stupid simple Python configuration management
 
 Inspired by [node config](https://www.npmjs.com/package/config), if you've used it before, Marten will feel familiar
 with a couple of extras
@@ -142,3 +142,9 @@ are merged together in the order they are loaded
 }
 ```
 
+
+# License
+
+Available under the MIT license
+
+See LICENSE for more details
