@@ -107,6 +107,28 @@ class ConfigurationTestCase(BaseConfigurationTestCase):
 		}
 		with mock.patch('os.environ', {'VAR': 'value'}):
 			self.assertEqual(Configuration._replace_env(input_dict), output_dict)
+	
+	def test_keys(self):
+		"""Test that keys() returns config.keys()"""
+		self.assertEqual(self.configuration.keys(), self.configuration.config.keys())
+
+	def test_values(self):
+		"""Test that values() returns config.values()"""
+		self.assertEqual(list(self.configuration.values()), list(self.configuration.config.values()))
+
+	def test_copy(self):
+		"""Test that copy() returns config.copy()"""
+		self.assertEqual(self.configuration.copy(), self.configuration.config.copy())
+
+	def test_items(self):
+		"""Test that items() returns config.items()"""
+		self.assertEqual(dict(self.configuration.items()), dict(self.configuration.config.items()))
+			
+	def test_get(self):
+		"""Test that get() returns config.get()"""
+		self.assertEqual(self.configuration.get('SHOULD_EXIST'), 1)
+		self.assertEqual(self.configuration.get('NESTED'), self.configuration.config.get('NESTED'))
+	
 
 
 class ModuleImportedConfigurationTestCase(BaseConfigurationTestCase):

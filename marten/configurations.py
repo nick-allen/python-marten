@@ -24,20 +24,41 @@ class Configuration(object):
 		"""Lazy-load config using parse_source(), and act like the underlying dict"""
 		return self.config[item]
 
+	def get(self, key, default=None):
+		"""Pass-through for dict.get()"""
+		return self.config.get(key, default)
+
+	def keys(self):
+		"""Pass-through for dict.keys()"""
+		return self.config.keys()
+
+	def items(self):
+		"""Pass-through for dict.items()"""
+		return self.config.items()
+
+	def copy(self):
+		"""Pass-through for dict.copy()"""
+		return self.config.copy()
+
+	def values(self):
+		"""Pass-through for dict.values"""
+		return self.config.values()
+
 	@property
 	def config(self):
 		"""Return dict config parsed for environment variables"""
 		if self.__config is None:
 			self.__config = self._replace_env(self.raw_config)
 
-		return self.__config
+		return self.__config.copy()
 
 	@property
 	def raw_config(self):
 		"""Returns raw dict config"""
 		if self.__raw_config is None:
 			self.__raw_config = self._filter_config(self.parse_source())
-		return self.__raw_config
+
+		return self.__raw_config.copy()
 
 	@staticmethod
 	def _replace_env(config_dict):
