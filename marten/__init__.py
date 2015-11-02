@@ -1,3 +1,5 @@
+"""Stupid simple Python configuration management"""
+
 from __future__ import absolute_import
 
 import os as _os
