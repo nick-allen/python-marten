@@ -10,7 +10,7 @@ except ImportError:
 
 from nose.tools import assert_dict_equal, assert_raises
 
-from marten.configurations import Configuration, ModuleConfiguration, JSONConfiguration, parse_directory, YAMLConfiguration
+from marten.configurations import Configuration, PythonConfiguration, JSONConfiguration, parse_directory, YAMLConfiguration
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
@@ -132,23 +132,23 @@ class ConfigurationTestCase(BaseConfigurationTestCase):
 
 
 class ModuleImportedConfigurationTestCase(BaseConfigurationTestCase):
-	"""Tests for the ModuleConfiguration class"""
+	"""Tests for the PythonConfiguration class"""
 
 	def get_configuration(self):
-		return ModuleConfiguration(__import__('module_config'))
+		return PythonConfiguration(__import__('module_config'))
 
 
 class ModuleFSPathStringConfigurationTestCase(BaseConfigurationTestCase):
-	"""Tests for the ModuleConfiguration class"""
+	"""Tests for the PythonConfiguration class"""
 
 	def get_configuration(self):
-		return ModuleConfiguration(os.path.join(TEST_DIR, 'fixtures/module_config.py'))
+		return PythonConfiguration(os.path.join(TEST_DIR, 'fixtures/module_config.py'))
 
 
 class ModulePackageStringConfigurationTestCase(BaseConfigurationTestCase):
 
 	def get_configuration(self):
-		return ModuleConfiguration('package.config')
+		return PythonConfiguration('package.config')
 
 
 class JSONConfigurationTestCase(BaseConfigurationTestCase):

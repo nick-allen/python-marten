@@ -83,7 +83,7 @@ class Configuration(object):
 		return self._source
 
 
-class ModuleConfiguration(Configuration):
+class PythonConfiguration(Configuration):
 	"""Configuration from an imported python module, dot-string, or full file path to a module"""
 
 	file_extensions = ('.py',)
