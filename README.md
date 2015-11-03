@@ -21,29 +21,39 @@ Tested with Python 2.7 and 3.5
 ```
 
 
-# Usage
+# Quick Start
 
 Marten provides several ways to load configurations, the simplest being the bundled config automatically
 created by Marten using files found in the `.marten/` directory
 
-```
-> mkdir .marten
-> echo "EXAMPLE = True" > .marten/default.py
-> marten
-{
-    "EXAMPLE": true
-}
-```
-
-The `marten` command outputs the fully parsed content of the bundled Marten config in JSON format
-
 The bundled config is available in Python at `marten.config`, and can be accessed like a normal dictionary
 
 ```
+> mkdir .marten
+> echo "EXAMPLE = True" > .marten/default.py
 > python
 >>> from marten import config
 >>> config['EXAMPLE']
 True
+```
+
+Configurations can also manually be created using the classes in the `marten.configurations` module
+
+```
+> python
+>>> from marten.configurations import PythonConfiguration
+>>> config = PythonConfiguration('.marten/default.py')
+>>> config['EXAMPLE']
+True
+```
+
+Marten also comes bundled with a tiny `marten` cli that outputs the bundled `marten.config` in JSON format
+
+```
+> marten
+{
+    "EXAMPLE": true
+}
 ```
 
 
@@ -52,7 +62,7 @@ True
 
 ## Swappable Configurations
 
-Marten can easily swap between different configurations using the `MARTEN_ENV` environment variable
+The bundled config can easily be swapped between different configuration environments using the `MARTEN_ENV` environment variable
 
 The `MARTEN_ENV` variable defaults to `default` 
 
@@ -61,11 +71,11 @@ The `MARTEN_ENV` variable defaults to `default`
 {
     "EXAMPLE": true
 }
-> echo "SECOND_FILE = 'This is a different environment'" > .marten/two.py
+> echo "SECOND_FILE = 'Environment number two'" > .marten/two.py
 > echo "THIRD_FILE = 'This is a third environment'" > .marten/three.py
 > MARTEN_ENV=two marten
 {
-    "SECOND_FILE": "This is a different environment"
+    "SECOND_FILE": "Environment number two"
 }
 > MARTEN_ENV=three marten
 {
@@ -109,11 +119,11 @@ Current supported formats:
 * YAML
 
 
-## Environment Variable Expansion
+## Nested Environment Variable Expansion
 
-Environment variables in values with the format `$VAR` or `${VAR}` are automatically expanded
+Strings in values with the format `$VAR` or `${VAR}` are automatically expanded as environment variables
 
-Unset environment variables are unmodified
+Variables that are unset are left unmodified
 
 ```
 > echo '{"REPLACED1": "This ${ENV}", "REPLACED2": "Second $ENV", "IGNORED": "${MISSING}"}' > .marten/environ.json
