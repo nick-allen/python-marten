@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/nick-allen/marten/badge.svg?branch=master&service=github)](https://coveralls.io/github/nick-allen/marten?branch=master)
 [![PyPI version](https://badge.fury.io/py/marten.svg)](https://badge.fury.io/py/marten) 
 
-Stupid simple Python configuration management
+Stupid simple Python configuration environments
 
 Inspired by [node config](https://www.npmjs.com/package/config), if you've used it before, Marten will feel familiar
 with a couple of extras

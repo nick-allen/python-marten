@@ -1,4 +1,4 @@
-"""Stupid simple Python configuration management"""
+"""Stupid simple Python configuration environments"""
 
 from __future__ import absolute_import
 
