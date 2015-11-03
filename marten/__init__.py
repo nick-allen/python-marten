@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 import os as _os
 
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 
 
 
@@ -13,9 +13,12 @@ __version__ = '0.5.1'
 _marten_dir = _os.path.join(_os.getcwd(), '.marten')
 _os.environ.setdefault('MARTEN_ENV', 'default')
 
-if _os.path.isdir(_marten_dir):
-	from .configurations import parse_directory as _parse_directory
-	config = _parse_directory(_marten_dir, _os.environ['MARTEN_ENV'])
-else:
-	from .configurations import Configuration as _Configuration
-	config = _Configuration({})
+try:
+	if _os.path.isdir(_marten_dir):
+		from .configurations import parse_directory as _parse_directory
+		config = _parse_directory(_marten_dir, _os.environ['MARTEN_ENV'])
+	else:
+		from .configurations import Configuration as _Configuration
+		config = _Configuration({})
+except ImportError:
+	config = None
