@@ -121,36 +121,3 @@ class YAMLConfiguration(Configuration):
 		"""Read file and parse as YAML"""
 		with open(self._source) as f:
 			return yaml.load(f)
-
-
-
-supported_extensions = {}
-
-for cls in Configuration.__subclasses__():
-	for ext in cls.file_extensions:
-		supported_extensions[ext] = cls
-
-
-def parse_directory(path, name):
-	"""
-	Parse path for all supported config file types beginning with name
-
-	Merges multiple configs with the same name into a single Configuration instance, overriding duplicate attributes in
-	order files were loaded
-
-	Ignores files with unsupported extensions
-	"""
-	configs = {}
-
-	if os.path.isdir(path):
-		for filename in os.listdir(path):
-			if filename.startswith(name):
-				ext = filename.split(name, 1)[1]
-				if ext in supported_extensions:
-					config = supported_extensions[ext](os.path.join(path, filename))
-					configs.update(config.raw_config)
-
-		return Configuration(configs)
-
-	else:
-		raise ValueError('`{}` is not a directory'.format(path))

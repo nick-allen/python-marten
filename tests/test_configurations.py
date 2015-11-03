@@ -1,16 +1,11 @@
 import os
 import sys
 from unittest import TestCase
+
 from six import with_metaclass
+import mock
 
-try:
-	from unittest import mock
-except ImportError:
-	import mock
-
-from nose.tools import assert_dict_equal, assert_raises
-
-from marten.configurations import Configuration, PythonConfiguration, JSONConfiguration, parse_directory, YAMLConfiguration
+from marten.configurations import Configuration, PythonConfiguration, JSONConfiguration, YAMLConfiguration
 
 __author__ = 'Nick Allen <nick.allen.cse@gmail.com>'
 
@@ -163,19 +158,3 @@ class YAMLConfigurationTestCase(BaseConfigurationTestCase):
 
 	def get_configuration(self):
 		return YAMLConfiguration(os.path.join(TEST_DIR, 'fixtures/static/config.yaml'))
-
-
-
-
-def test_parse_directory():
-	"""Test that the parse_directory function properly merges multiple configuration files"""
-	config = parse_directory(os.path.join(TEST_DIR, 'fixtures/parse_directory'), 'test')
-
-	assert_dict_equal(config.config, {
-		"JSON": True,
-		"PYTHON": True,
-		"DUPLICATE": 'python'
-	})
-
-	with assert_raises(ValueError):
-		parse_directory('/Not/a/real/path', 'test')
