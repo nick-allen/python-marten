@@ -102,7 +102,18 @@ class ConfigurationTestCase(BaseConfigurationTestCase):
 		}
 		with mock.patch('os.environ', {'VAR': 'value'}):
 			self.assertEqual(Configuration._replace_env(input_dict), output_dict)
-	
+
+	def test_repr(self):
+		"""Test the repr() can be used to reconstruct a Configuration instance"""
+		new_config = eval(repr(self.configuration))
+
+		self.assertIsNot(new_config, self.configuration)
+		self.assertEqual(new_config.config, self.configuration.config)
+
+	def test_str(self):
+		"""Test the str() returns expected output"""
+		self.assertEqual(str(self.configuration), str(self.configuration.config))
+
 	def test_keys(self):
 		"""Test that keys() returns config.keys()"""
 		self.assertEqual(self.configuration.keys(), self.configuration.config.keys())

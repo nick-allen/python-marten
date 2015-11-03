@@ -24,6 +24,14 @@ class Configuration(object):
 		"""Lazy-load config using parse_source(), and act like the underlying dict"""
 		return self.config[item]
 
+	def __str__(self):
+		"""Return self.config str"""
+		return str(self.config)
+
+	def __repr__(self):
+		"""Return repr for base Configuration class"""
+		return "Configuration({})".format(repr(self.config))
+
 	def get(self, key, default=None):
 		"""Pass-through for dict.get()"""
 		return self.config.get(key, default)
