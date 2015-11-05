@@ -60,7 +60,7 @@ Marten also comes bundled with a tiny `marten` cli that outputs the bundled `mar
 # Features
 
 
-## Swappable Configurations
+### Swappable Configurations
 
 The bundled config can easily be swapped between different configuration environments using the `MARTEN_ENV` environment variable
 
@@ -84,7 +84,7 @@ The `MARTEN_ENV` variable defaults to `default`
 ```
 
 
-## Full Python
+### Full Python
 
 The configuration files are not parsed, but are imported as Python modules
 
@@ -100,7 +100,7 @@ to be used for logic and setup
 ```
 
 
-## Multiple File Formats
+### Multiple File Formats
 
 Marten is not limited to Python files
 
@@ -119,7 +119,7 @@ Current supported formats:
 * YAML
 
 
-## Nested Environment Variable Expansion
+### Nested Environment Variable Expansion
 
 Strings in values with the format `$VAR` or `${VAR}` are automatically expanded as environment variables
 
@@ -136,7 +136,7 @@ Variables that are unset are left unmodified
 ```
 
 
-## Merge Multiple Files
+### Merge Multiple Files
 
 Since Marten operates on filename and extension separately, two files with the same name but different extensions
 are merged together in the order they are loaded
