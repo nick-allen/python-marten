@@ -100,7 +100,8 @@ class PythonConfiguration(Configuration):
 		"""Load module if provided a dot-string, then parse config from module"""
 		if isinstance(self._source, six.string_types):
 			if os.path.isfile(self._source):
-				module = imp.load_source(self._source, self._source)
+				with open(self._source) as f:
+					module = imp.load_source('marten.loaded_configs.' + self._source.split('/')[-1][:-3], self._source, f)
 			else:
 				module = __import__(self._source, fromlist=['*'])
 		else:

@@ -53,3 +53,4 @@ def get_config_from_env():
 		config = Configuration({})
 
 	return config
+

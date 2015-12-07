@@ -10,7 +10,7 @@ install:
   - python setup.py install
   - pip install -r test-requirements.txt
 
-script: nosetests --with-coverage --cover-package=marten
+script: ./runtests.py --with-coverage --cover-package=marten
 
 after_success:
   coveralls
