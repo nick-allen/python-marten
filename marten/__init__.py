@@ -2,9 +2,11 @@
 
 from __future__ import absolute_import
 
+from marten import loaded_configs
+
 import os as _os
 
-__version__ = '0.6.0'
+__version__ = '0.6.1'
 
 
 
