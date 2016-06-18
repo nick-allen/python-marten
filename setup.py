@@ -32,7 +32,7 @@ setup(
 	name='marten',
 	version=__version__,
 	packages=find_packages(exclude=('tests.*', 'tests',)),
-	url='https://github.com/nick-allen/marten',
+	url='https://github.com/nick-allen/python-marten',
 	license='MIT',
 	author='Nick Allen',
 	author_email='nick.allen.cse@gmail.com',
