@@ -1,7 +1,7 @@
 # Marten
 
-[![Build Status](https://travis-ci.org/nick-allen/marten.svg?branch=master)](https://travis-ci.org/nick-allen/marten)
-[![Coverage Status](https://coveralls.io/repos/nick-allen/marten/badge.svg?branch=master&service=github)](https://coveralls.io/github/nick-allen/marten?branch=master)
+[![Build Status](https://travis-ci.org/nick-allen/python-marten.svg?branch=master)](https://travis-ci.org/nick-allen/python-marten)
+[![Coverage Status](https://coveralls.io/repos/nick-allen/python-marten/badge.svg?branch=master&service=github)](https://coveralls.io/github/nick-allen/python-marten?branch=master)
 [![PyPI version](https://badge.fury.io/py/marten.svg)](https://badge.fury.io/py/marten) 
 
 Stupid simple Python configuration environments
