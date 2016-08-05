@@ -30,7 +30,7 @@ test_requirements = parse_requirements('test-requirements.txt')
 
 setup(
 	name='marten',
-	version=__version__,
+	version='.'.join(__version__),
 	packages=find_packages(exclude=('tests.*', 'tests',)),
 	url='https://github.com/nick-allen/python-marten',
 	license='MIT',
