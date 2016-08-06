@@ -6,8 +6,8 @@ from marten import loaded_configs
 
 import os as _os
 
-__version__ = ('0', '7', '0')
-
+VERSION = (0, 7, 0)
+__version__ = '.'.join([str(v) for v in VERSION])
 
 
 _os.environ.setdefault('MARTEN_ENV', 'default')
